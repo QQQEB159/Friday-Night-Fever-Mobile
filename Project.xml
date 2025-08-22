@@ -96,7 +96,6 @@
 
 	<assets path="assets/videos"/>
 	<assets path='assets/shadow' library="shadow" embed='true' />
-	<assets path='LICENSE' rename='LICENSE.txt' />
 
 	<!-- <assets path="CHANGELOG.md" rename='changelog.txt'/> -->
 
