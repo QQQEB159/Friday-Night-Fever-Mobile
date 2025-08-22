@@ -8,6 +8,15 @@ import flixel.FlxG;
  */
 class ClientPrefs
 {
+	// Mobile and Mobile Controls Releated
+	public static var extraButtons:String = "NONE"; // mobile extra button option
+	public static var hitboxPos:Bool = true; // hitbox extra button position option
+	public static var controlsAlpha:Float = FlxG.onMobile ? 0.6 : 0;
+	public static var screensaver:Bool = false;
+	#if android
+	public static var storageType:String = "EXTERNAL_DATA";
+	#end
+	public static var hitboxType:String = "Gradient";
 	public static var keybinds(get, never):Array<String>;
 	public static var leftBind = "A";
 	public static var downBind = "S";
@@ -35,7 +44,7 @@ class ClientPrefs
 	public static var msX:Float = -1;
 	public static var msY:Float = -1;
 
-	public static var fpsCap:Int = 120;
+	public static var fpsCap:Int = 60;
 	public static var antialiasing:Bool = true;
 	public static var shaders:Bool = true;
 

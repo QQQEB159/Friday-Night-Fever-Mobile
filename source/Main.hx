@@ -18,17 +18,31 @@ class Main extends Sprite
 	var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var initialState:Class<FlxState> = InitState; // The FlxState the game starts with.
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
-	var framerate:Int = 120; // How many frames per second the game should run at.
+	var framerate:Int = 60; // How many frames per second the game should run at.
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
 	var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop target
 
 	public static function main():Void
 	{
 		Lib.current.addChild(new Main());
+		#if cpp
+		cpp.NativeGc.enable(true);
+		#elseif hl
+		hl.Gc.enable(true);
+		#end
 	}
 
 	public function new()
 	{
+		#if mobile
+		#if android
+		StorageUtil.requestPermissions();
+		#end
+		Sys.setCwd(StorageUtil.getStorageDirectory());
+		#end
+
+		CrashHandler.init();
+		
 		super();
 
 		if (stage != null)
@@ -57,7 +71,11 @@ class Main extends Sprite
 		addChild(game);
 
 		fpsCounter = new FPS_MEM(10, 3, 0xFFFFFF);
+		#if !mobile
 		addChild(fpsCounter);
+		#else
+		FlxG.game.addChild(fpsCounter);
+		#end
 		toggleFPS(ClientPrefs.fps);
 
 		#if desktop
@@ -66,12 +84,19 @@ class Main extends Sprite
 			Discord.DiscordClient.shutdown();
 		});
 		#end
+		
+		#if mobile
+		lime.system.System.allowScreenTimeout = ClientPrefs.screensaver;
+		#if android
+		FlxG.android.preventDefaultKeys = [BACK]; 
+		#end
+		#end
 	}
 
 	public static function clearCache()
 	{
 		Assets.cache.clear("songs");
-		Assets.cache.clear("shared:images/characters");
+		Assets.cache.clear("shared/images/characters");
 		Assets.cache.clear("week");
 	}
 
@@ -104,22 +129,23 @@ class Main extends Sprite
 		}
 
 		System.gc();
+		#if cpp
+		cpp.NativeGc.run(true);
+		#elseif hl
+		hl.Gc.major();
+		#end
 	}
 
 	var fpsCounter:FPS;
 
 	public function toggleFPS(fpsEnabled:Bool):Void
 	{
-		#if !mobile
 		fpsCounter.visible = fpsEnabled;
-		#end
 	}
 
 	public function changeFPSColor(color:FlxColor)
 	{
-		#if !mobile
 		fpsCounter.textColor = color;
-		#end
 	}
 
 	public function setFPSCap(cap:Int)
@@ -136,11 +162,7 @@ class Main extends Sprite
 
 	public function getFPS():Float
 	{
-		#if !mobile
 		return fpsCounter.currentFPS;
-		#else
-		return openfl.Lib.current.stage.frameRate;
-		#end
 	}
 
 	public static function playFreakyMenu(fade:Bool = true)

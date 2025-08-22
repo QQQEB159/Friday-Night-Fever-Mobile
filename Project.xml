@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+*<?xml version="1.0" encoding="utf-8"?>
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Fever" file="Kade Engine" packageName="com.fnfever.fevertown" package="com.fnfever.fevertown" main="Main" version="1.6.0" company="kadedev" />
+	<app title="Friday Night Fever" file="Fever" packageName="com.fnfever.fevertown" package="com.fnfever.fevertown" main="Main" version="1.6.0" company="kadedev" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
@@ -29,7 +29,7 @@
 	<window vsync="false" antialiasing="0" if="cpp" />
 
 	<!--Mobile-specific-->
-	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" resizable="false"/>
+	<window if="mobile" orientation="landscape" fullscreen="true" resizable="false" allow-shaders="true" require-shaders="true" allow-high-dpi="true" />
 
 	<!--Switch-specific-->
 	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
@@ -105,7 +105,7 @@
 		THEN UHHH I USED THE NAME OF THE FONT WITH SETFORMAT() ON THE TEXT!!!
 		NOT USING A DIRECT THING TO THE ASSET!!!
 	-->
-	<assets path="assets/fonts" embed='true'/>
+	<assets path="assets/fonts" />
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxedev set='webgl' />
@@ -115,7 +115,7 @@
 	<haxelib name="flixel-ui" />
 	<haxelib name="flxanimate" />
 	<haxelib name="discord_rpc" if="windows"/>
-	<haxelib name="hxCodec" if="desktop" />
+	<haxelib name="hxCodec" />
 	<haxelib name="linc_luajit" unless="html"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
@@ -126,10 +126,28 @@
 	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 
-	<!-- Show debug traces for hxCodec -->
-	<!--<haxedef name="HXC_DEBUG_TRACE" if="debug" />-->
-
 	<haxedef name="HXCPP_GC_BIG_BLOCKS"/>
+	
+	<!-- Show debug traces for hxCodec -->
+	<haxedef name="HXC_DEBUG_TRACE" if="debug" />
+	
+	<!--Enable this for Nape release builds for a serious peformance improvement-->
+	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
+	
+	<section if="cpp">
+		<haxedef name="HXCPP_CHECK_POINTER" />
+		<haxedef name="HXCPP_STACK_LINE" />
+		<haxedef name="HXCPP_STACK_TRACE" />
+		<haxedef name="HXCPP_CATCH_SEGV" />
+	</section>
+
+	<!-- Allow Access to Engine Files in iOS -->
+	<haxedef name="SHARE_MOBILE_FILES" if="ios" />
+	
+	<haxedef name='no-deprecation-warnings' />
+
+	<!-- Do whatever you want I'm tired uninstall and install everytime -->
+	<certificate path="key.keystore" password="psychengine" alias="psychport" alias-password="psychengine" if="android" unless="debug" />
 
 	<!-- _________________________________ Custom _______________________________ -->
 

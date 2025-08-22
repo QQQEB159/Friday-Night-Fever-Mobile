@@ -13,6 +13,9 @@ import flixel.util.FlxColor;
 import flixel.util.FlxSave;
 import lime.app.Application;
 import sys.FileSystem;
+#if mobile
+import mobile.CopyState;
+#end
 
 using StringTools;
 
@@ -30,6 +33,7 @@ class InitState extends MusicBeatState
 		AchievementHandler.initGamejolt();
 		CostumeHandler.load();
 		PlayerSettings.init();
+		mobile.MobileData.init();
 
 		FlxG.mouse.visible = false;
 		FlxG.fixedTimestep = false;
@@ -43,10 +47,6 @@ class InitState extends MusicBeatState
 		{
 			DiscordClient.shutdown();
 		});
-		#end
-
-		#if mobile
-		FlxG.android.preventDefaultKeys = [BACK];
 		#end
 
 		#if SHADOW_BUILD
@@ -66,6 +66,8 @@ class InitState extends MusicBeatState
 			FlxG.stage.window.title = "Friday Night Fever: The Winkel Build";
 		}
 
+		if(!CopyState.checkExistingFiles()) FlxG.switchState(new CopyState());
+		else
 		FlxG.switchState(new TitleState());
 		#end
 	}

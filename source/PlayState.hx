@@ -38,10 +38,10 @@ import flixel.math.FlxPoint;
 #else
 import flixel.math.FlxPoint.FlxBasePoint as FlxPoint;
 #end
-#if (sys && !mobile)
+#if !mobile
 import Discord.DiscordClient;
-import sys.FileSystem;
 #end
+import sys.FileSystem;
 
 class PlayState extends MusicBeatState
 {
@@ -258,11 +258,9 @@ class PlayState extends MusicBeatState
 
 		FlxG.sound.cache(Paths.voices(PlayState.SONG.song));
 		FlxG.sound.cache(Paths.inst(PlayState.SONG.song));
-
-		#if windows
+		
 		executeModchart = FlxG.save.data.disableModCharts ? false : FileSystem.exists(Paths.lua(PlayState.SONG.song.toLowerCase() + "/modchart"));
 		trace('Mod chart: ' + executeModchart + " - " + Paths.lua(PlayState.SONG.song.toLowerCase() + "/modchart"));
-		#end
 
 		#if windows
 		// Discord Rich Presence
@@ -826,7 +824,7 @@ class PlayState extends MusicBeatState
 		add(healthBar);
 
 		scoreTxt = new FlxText(FlxG.width / 2 - 235, healthBarBG.y + 35, 0, "", 20);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), #if !mobile 18 #else 24 #end, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		updateScoring();
 
 		scoreTxt.borderSize = 1.25;
@@ -972,6 +970,11 @@ class PlayState extends MusicBeatState
 		}
 
 		System.gc();
+		#if cpp
+		cpp.NativeGc.run(true);
+		#elseif hl
+		hl.Gc.major();
+		#end
 	}
 
 	function jumpscare():Void
@@ -1034,9 +1037,7 @@ class PlayState extends MusicBeatState
 
 	var startTimer:FlxTimer;
 
-	#if windows
 	public static var luaModchart:LuaScript = null;
-	#end
 
 	public function changeStrums(?pixel:Bool) // stolen from yknow that one thing
 	{
@@ -1111,13 +1112,11 @@ class PlayState extends MusicBeatState
 			generateStaticArrows(playerStrums, FlxG.width * 0.75, true);
 		}
 
-		#if windows
 		if (executeModchart)
 		{
 			luaModchart = LuaScript.createModchartState();
 			luaModchart.executeState('start', [PlayState.SONG.song]);
 		}
-		#end
 
 		Conductor.songPosition = -Conductor.crochet * 5;
 
@@ -1184,10 +1183,13 @@ class PlayState extends MusicBeatState
 				});
 			}
 
-			#if cpp
 			System.gc();
-			cpp.vm.Gc.run(true);
-			#end
+			//cpp.vm.Gc.run(true);
+			#if cpp
+		    cpp.NativeGc.run(true);
+		    #elseif hl
+		    hl.Gc.major();
+		    #end
 
 			swagCounter++;
 		}, 4);
@@ -1556,6 +1558,11 @@ class PlayState extends MusicBeatState
 				FlxG.cameras.remove(camPause);
 				camPause.destroy();
 				openfl.system.System.gc();
+				#if cpp
+		        cpp.NativeGc.run(true);
+		        #elseif hl
+		        hl.Gc.major();
+		        #end
 			}
 
 			if (FlxG.sound.music != null && !startingSong)
@@ -1700,7 +1707,6 @@ class PlayState extends MusicBeatState
 		if (ClientPrefs.botplay && FlxG.keys.justPressed.ONE)
 			camHUD.visible = !camHUD.visible;
 
-		#if windows
 		if (executeModchart && luaModchart != null && !startingSong)
 		{
 			luaModchart.setVar('songPos', Conductor.songPosition);
@@ -1730,7 +1736,6 @@ class PlayState extends MusicBeatState
 				playerStrums.members[i].visible = p2;
 			}
 		}
-		#end
 
 		if (!inCutscene)
 		{
@@ -1788,13 +1793,12 @@ class PlayState extends MusicBeatState
 			DiscordClient.changePresence("Chart Editor", null, null, true);
 			#end
 			FlxG.switchState(new ChartingState());
-			#if windows
+			
 			if (luaModchart != null)
 			{
 				luaModchart.die();
 				luaModchart = null;
 			}
-			#end
 		}
 
 		if (health >= 2)
@@ -1832,13 +1836,11 @@ class PlayState extends MusicBeatState
 		if (FlxG.keys.justPressed.EIGHT && SONG.song.toLowerCase() != 'shadow')
 		{
 			FlxG.switchState(new AnimationDebug(SONG.player2));
-			#if windows
 			if (luaModchart != null)
 			{
 				luaModchart.die();
 				luaModchart = null;
 			}
-			#end
 		}
 		#end
 
@@ -1855,10 +1857,8 @@ class PlayState extends MusicBeatState
 		{
 			Conductor.songPosition += (FlxG.elapsed * 1000) * FlxG.sound.music.pitch;
 
-			#if windows
 			if (luaModchart != null && PlayState.SONG.notes[Std.int(curStep / 16)] != null)
 				luaModchart.setVar("mustHit", PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection);
-			#end
 		}
 
 		if (camZooming)
@@ -2127,10 +2127,8 @@ class PlayState extends MusicBeatState
 
 				cpuStrums.members[daNote.noteData].animation.play('confirm', true);
 
-				#if windows
 				if (luaModchart != null)
 					luaModchart.executeState('playerTwoSing', [Math.abs(daNote.noteData), Conductor.songPosition]);
-				#end
 
 				if (SONG.needsVoices)
 					vocals.volume = 1;
@@ -2434,13 +2432,11 @@ class PlayState extends MusicBeatState
 	{
 		skipDialogue = false;
 
-		#if windows
 		if (luaModchart != null)
 		{
 			luaModchart.die();
 			luaModchart = null;
 		}
-		#end
 
 		canPause = false;
 		FlxG.sound.music.volume = 0;
@@ -2474,13 +2470,11 @@ class PlayState extends MusicBeatState
 				transIn = FlxTransitionableState.defaultTransIn;
 				transOut = FlxTransitionableState.defaultTransOut;
 
-				#if windows
 				if (luaModchart != null)
 				{
 					luaModchart.die();
 					luaModchart = null;
 				}
-				#end
 
 				Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
 
@@ -2737,10 +2731,8 @@ class PlayState extends MusicBeatState
 				boyfriendReflection.playAnim('sing' + dataSuffix[direction] + 'miss', true);
 		}
 
-		#if windows
 		if (luaModchart != null)
 			luaModchart.executeState('playerOneMiss', [direction, Conductor.songPosition]);
-		#end
 
 		totalPlayed += 1;
 		updateScoring();
@@ -2788,10 +2780,8 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			#if windows
 			if (luaModchart != null)
 				luaModchart.executeState('playerOneSing', [note.noteData, Conductor.songPosition]);
-			#end
 
 			playerStrums.members[note.noteData].animation.play('confirm', true);
 
@@ -2883,13 +2873,11 @@ class PlayState extends MusicBeatState
 			resyncVocals();
 		}
 
-		#if windows
 		if (executeModchart && luaModchart != null)
 		{
 			luaModchart.setVar('curStep', curStep);
 			luaModchart.executeState('stepHit', [curStep]);
 		}
-		#end
 
 		#if windows
 		// Updating Discord Rich Presence (with Time Left)
@@ -3036,13 +3024,11 @@ class PlayState extends MusicBeatState
 			FlxG.log.add('CHANGED BPM!');
 		}
 
-		#if windows
 		if (executeModchart && luaModchart != null)
 		{
 			luaModchart.setVar('curBeat', curBeat);
 			luaModchart.executeState('beatHit', [curBeat]);
 		}
-		#end
 
 		if (!curOpponent.animation.curAnim.name.startsWith('sing'))
 		{

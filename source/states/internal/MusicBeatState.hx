@@ -97,12 +97,22 @@ class MusicBeatState extends FlxUIState
 	override function onFocus()
 	{
 		System.gc();
+		#if cpp
+		cpp.NativeGc.run(true);
+		#elseif hl
+		hl.Gc.major();
+		#end
 		super.onFocus();
 	}
 
 	override function onFocusLost()
 	{
 		System.gc();
+		#if cpp
+		cpp.NativeGc.run(true);
+		#elseif hl
+		hl.Gc.major();
+		#end
 		super.onFocusLost();
 	}
 }

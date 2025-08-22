@@ -24,10 +24,10 @@ class Bloom extends FlxShader
     uniform float actualScale;
     float scale = 0.3;
     float thresh = 1.;
-    vec2 vUv =openfl_TextureCoordv;
     
     void main()
     {
+        vec2 vUv =openfl_TextureCoordv;
         vec4 sum = vec4(0);
     
         // mess of for loops due to gpu compiler/hardware limitations

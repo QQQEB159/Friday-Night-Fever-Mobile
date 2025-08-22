@@ -2,7 +2,7 @@ package scripting;
 
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
-#if windows
+#if sys
 import flixel.FlxBasic;
 import flixel.FlxCamera;
 import flixel.FlxG;
