@@ -43,7 +43,7 @@ jobs:
           haxelib install hxCodec 2.6.0
           haxelib install hscript 2.5.0
           haxelib install flxanimate 3.0.0
-          haxelib git linc_luajit https://github.com/th2l-devs/linc_luajit
+          haxelib git linc_luajit https://github.com/AnDevGo/linc_luajit-S
           haxelib list
       
       - name: Setup Lime
