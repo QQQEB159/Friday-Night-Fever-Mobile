@@ -130,22 +130,22 @@ class Controls extends FlxActionSet
 	public var UP(get, never):Bool;
 
 	inline function get_UP()
-		return _up.check() || mobileControlsPressed(MobileInputID.UP);
+		return _up.check() || mobileControlsPressed(MobileInputID.NOTE_UP);
 
 	public var LEFT(get, never):Bool;
 
 	inline function get_LEFT()
-		return _left.check() || mobileControlsPressed(MobileInputID.LEFT);
+		return _left.check() || mobileControlsPressed(MobileInputID.NOTE_LEFT);
 
 	public var RIGHT(get, never):Bool;
 
 	inline function get_RIGHT()
-		return _right.check() || mobileControlsPressed(MobileInputID.RIGHT);
+		return _right.check() || mobileControlsPressed(MobileInputID.NOTE_RIGHT);
 
 	public var DOWN(get, never):Bool;
 
 	inline function get_DOWN()
-		return _down.check() || mobileControlsPressed(MobileInputID.DOWN);
+		return _down.check() || mobileControlsPressed(MobileInputID.NOTE_DOWN);
 
 	public var UP_P(get, never):Bool;
 
