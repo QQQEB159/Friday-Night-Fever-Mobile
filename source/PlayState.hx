@@ -170,6 +170,8 @@ class PlayState extends MusicBeatState
 
 	var currentTimingShown:TimingText;
 	var songName:FlxText;
+	
+	public static var qqqeb:Bool = false;
 
 	public static function setModCamera(bool:Bool)
 	{
@@ -229,10 +231,7 @@ class PlayState extends MusicBeatState
 		instance = this;
 		endingSong = false;
 
-		if (!isStoryMode || StoryMenuState.get_weekData()[storyWeek][0].toLowerCase() == SONG.song.toLowerCase())
-		{
-			Main.clearMemory();
-		}
+		Main.clearMemory();
 
 		super.create();
 
@@ -777,6 +776,12 @@ class PlayState extends MusicBeatState
 		playerStrums = new FlxTypedGroup<FlxSprite>();
 		cpuStrums = new FlxTypedGroup<FlxSprite>();
 
+		switch (SONG.song.toLowerCase())
+		{
+		   case 'dead-mans-melody':
+		   qqqeb = true;
+		}
+		
 		#if !android
 		addTouchPad("NONE", "P");
 		addTouchPadCamera();
@@ -3290,6 +3295,8 @@ class PlayState extends MusicBeatState
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
 		FlxG.signals.gameResized.remove(onGameResize);
+		
+		qqqeb = false;
 
 		return true;
 	}

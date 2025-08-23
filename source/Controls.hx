@@ -210,7 +210,7 @@ class Controls extends FlxActionSet
 	public var DODGE(get, never):Bool;
 
 	inline function get_DODGE()
-		return _dodge.check();
+		return _dodge.check() || MusicBeatState.getState().mobileControls.buttonExtra.justPressed;
 
 	public var CHEAT(get, never):Bool;
 
