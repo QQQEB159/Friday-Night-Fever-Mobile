@@ -166,6 +166,12 @@ class MusicBeatState extends FlxUIState
 		curStep = lastChange.stepTime + Math.floor((Conductor.songPosition - lastChange.songTime) / Conductor.stepCrochet);
 	}
 
+	public static function getState():MusicBeatState {
+		var curState:Dynamic = FlxG.state;
+		var leState:MusicBeatState = curState;
+		return leState;
+	}
+	
 	public function stepHit():Void
 	{
 		if (curStep % 4 == 0 && !disableBeathit)

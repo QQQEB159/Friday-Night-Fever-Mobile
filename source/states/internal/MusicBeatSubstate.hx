@@ -1,6 +1,7 @@
 package states.internal;
 
 import Conductor.BPMChangeEvent;
+import flixel.FlxG;
 import flixel.FlxSubState;
 import mobile.MobileData;
 import mobile.IMobileControls;
