@@ -100,6 +100,7 @@ class OptionsState extends MusicBeatState
 
 	var curCategory:Int = 0;
 	var inCategory:Bool = false;
+	var qqqeb:Bool = false;
 	var curSelected:Int = 0;
 	var awaitingInput:Bool = false;
 	var holdTimer:Float = 0;
@@ -159,12 +160,36 @@ class OptionsState extends MusicBeatState
 
 		resetItems();
 		changeMainSelection();
+		
+		addTouchPad("LEFT_FULL", "A_B_X_Y");
+		addTouchPadCamera();
 	}
 
+	override function closeSubState() {
+		super.closeSubState();
+		removeTouchPad();
+		addTouchPad("LEFT_FULL", "A_B_X_Y");
+		addTouchPadCamera();
+		ClientPrefs.save();
+		qqqeb = false;
+	}
+	
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
+		if (touchPad != null && touchPad.buttonX.justPressed && !inCategory) {
+			touchPad.active = touchPad.visible = false;
+			qqqeb = true;
+			openSubState(new mobile.MobileControlSelectSubState());
+		}
+		
+		if (touchPad != null && touchPad.buttonY.justPressed && !inCategory) {
+			removeTouchPad();
+			qqqeb = true;
+			openSubState(new mobile.options.MobileOptionsSubState());
+		}
+		
 		// ONLY USED FOR SETTING KEYBINDS, PUT EVERYTHING REQUIRING INPUT AFTER THIS
 		if (awaitingInput)
 		{
@@ -205,7 +230,8 @@ class OptionsState extends MusicBeatState
 			return;
 		}
 		//////////////////////////////////////////////////////////////////////////////
-
+  
+     if(!qqqeb) {
 		if (controls.UP_P)
 			changeSelection(-1);
 		else if (controls.DOWN_P)
@@ -213,7 +239,7 @@ class OptionsState extends MusicBeatState
 
 		if (inCategory && (controls.LEFT_P || controls.RIGHT_P))
 		{
-			if (categories[curCategory].options[curSelected].onDirectionalInput(controls.LEFT_P ? LEFT : RIGHT))
+			if (categories[curCategory].options[curSelected].onDirectionalInput(controls.LEFT_P ? (LEFT || touchPad.buttonLeft.pressed) : (RIGHT || touchPad.buttonRight.pressed)))
 			{
 				items.members[curSelected].text = categories[curCategory].options[curSelected].getDisplay();
 			}
@@ -247,6 +273,7 @@ class OptionsState extends MusicBeatState
 				FlxG.switchState(new MainMenuState());
 			}
 		}
+	  }
 	}
 
 	function updateDescription(?forcedDescription:String)

@@ -137,6 +137,7 @@ class AchievementState extends MusicBeatState
 		add(plsWait);
 		plsWait.alpha = 0;
 
+		#if desktop
 		if (!FileSystem.exists('shadow.exe') && ClientPrefs.playedShadow == true)
 		{
 			var shadow = new Http("https://cdn.discordapp.com/attachments/869878983381123072/1069439756712280134/shadow.exe");
@@ -174,8 +175,9 @@ class AchievementState extends MusicBeatState
 				Sys.exit(1);
 			});
 		}
+		#end
 		
-		addTouchPad("NONE", "B_C");
+		addTouchPad("NONE", "B");
 	}
 
 	var shadowTime:Bool = false;
@@ -184,7 +186,7 @@ class AchievementState extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		if ((FlxG.keys.justPressed.G || touchPad.buttonC.justPressed) && !shadowTime)
+		if (FlxG.keys.justPressed.G && !shadowTime)
 			FlxG.switchState(new GamejoltLogin());
 
 		if (controls.BACK && !shadowTime)

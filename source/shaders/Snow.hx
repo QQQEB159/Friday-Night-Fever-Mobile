@@ -16,7 +16,7 @@ class Snow extends FlxShader
     vec2 uv;
 
     float rnd(float x) {
-        return fract(sin(dot(vec2(x + 48, 38 / (x + 2.5)), vec2(13, 78))) * (43758));
+        return fract(sin(dot(vec2(x + 48.0, 38.0 / (x + 2.5)), vec2(13.0, 78.0))) * (43758.0));
     }
 
     float drawCircle(vec2 center, float radius) {
