@@ -134,7 +134,7 @@ class WeekPreviewSubState extends MusicBeatSubstate
 		FlxTween.tween(bg, {x: bg.x - bg.width}, 0.5);
 		updateDifficulty();
 		
-		addTouchPad"LEFT_RIGHT", "A_B");
+		addTouchPad("LEFT_RIGHT", "A_B");
 		addTouchPadCamera();
 	}
 
