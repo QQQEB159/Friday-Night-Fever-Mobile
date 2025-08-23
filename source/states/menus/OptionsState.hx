@@ -172,6 +172,8 @@ class OptionsState extends MusicBeatState
 		addTouchPadCamera();
 		ClientPrefs.save();
 		qqqeb = false;
+		for (i in sprites)
+			i.alpha = 1;
 	}
 	
 	override function update(elapsed:Float)
@@ -181,12 +183,16 @@ class OptionsState extends MusicBeatState
 		if (touchPad != null && touchPad.buttonX.justPressed && !inCategory) {
 			touchPad.active = touchPad.visible = false;
 			qqqeb = true;
+			for (i in sprites)
+				i.alpha = 0;
 			openSubState(new mobile.MobileControlSelectSubState());
 		}
 		
 		if (touchPad != null && touchPad.buttonY.justPressed && !inCategory) {
 			removeTouchPad();
 			qqqeb = true;
+			for (i in sprites)
+				i.alpha = 0;
 			openSubState(new mobile.options.MobileOptionsSubState());
 		}
 		
@@ -239,7 +245,7 @@ class OptionsState extends MusicBeatState
 
 		if (inCategory && (controls.LEFT_P || controls.RIGHT_P))
 		{
-			if (categories[curCategory].options[curSelected].onDirectionalInput(controls.LEFT_P ? (LEFT || touchPad.buttonLeft.pressed) : (RIGHT || touchPad.buttonRight.pressed)))
+			if (categories[curCategory].options[curSelected].onDirectionalInput(controls.LEFT_P ? LEFT : RIGHT))
 			{
 				items.members[curSelected].text = categories[curCategory].options[curSelected].getDisplay();
 			}

@@ -20,8 +20,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
-import psych.options.Option;
-import psych.*;
+import Controls;
 
 using StringTools;
 
@@ -157,13 +156,13 @@ class BaseOptionsMenu extends MusicBeatSubstate
 					reloadCheckboxes();
 				}
 			} else {
-				if((controls.LEFT || touchPad.buttonLeft.pressed) || (controls.RIGHT || touchPad.buttonRight.pressed)) {
+				if(controls.LEFT || controls.RIGHT) {
 					var pressed = (controls.LEFT_P || controls.RIGHT_P);
 					if(holdTime > 0.5 || pressed) {
 						if(pressed) {
 							var add:Dynamic = null;
 							if(curOption.type != 'string') {
-								add = (controls.LEFT || touchPad.buttonLeft.pressed) ? -curOption.changeValue : curOption.changeValue;
+								add = controls.LEFT ? -curOption.changeValue : curOption.changeValue;
 							}
 
 							switch(curOption.type)
@@ -203,7 +202,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 							curOption.change();
 							FlxG.sound.play(Paths.sound('scrollMenu'));
 						} else if(curOption.type != 'string') {
-							holdValue += curOption.scrollSpeed * elapsed * ((controls.LEFT || touchPad.buttonLeft.pressep) ? -1 : 1);
+							holdValue += curOption.scrollSpeed * elapsed * (controls.LEFT ? -1 : 1);
 							if(holdValue < curOption.minValue) holdValue = curOption.minValue;
 							else if (holdValue > curOption.maxValue) holdValue = curOption.maxValue;
 
