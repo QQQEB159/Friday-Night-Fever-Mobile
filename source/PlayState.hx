@@ -783,8 +783,8 @@ class PlayState extends MusicBeatState
 		touchPad.visible = true;
 		#end
 		addMobileControls();
-		mobileControls.onButtonDown.add(onButtonPress);
-		mobileControls.onButtonUp.add(onButtonRelease);
+		//mobileControls.onButtonDown.add(onButtonPress);
+		//mobileControls.onButtonUp.add(onButtonRelease);
 		
 		generateSong(SONG.song);
 
