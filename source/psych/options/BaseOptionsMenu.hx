@@ -1,4 +1,4 @@
-package options;
+package psych.options;
 
 import openfl.text.TextField;
 import flixel.FlxG;
@@ -20,7 +20,6 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
-import Controls;
 
 using StringTools;
 
