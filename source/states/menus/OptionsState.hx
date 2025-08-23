@@ -84,7 +84,7 @@ class OptionsState extends MusicBeatState
 						}
 					}),
 				new Option("Anti Aliasing", "When disabled, forces all sprites to not have anti-aliasing. (In-Game Only)", "antialiasing", BOOL),
-				// new Option("Use Shaders", "When disabled, shaders will not be used and causes certain songs to lose special effects.", "shaders", BOOL)
+				new Option("Use Shaders", "When disabled, shaders will not be used and causes certain songs to lose special effects.", "shaders", BOOL)
 			]
 		}
 		#if debug
