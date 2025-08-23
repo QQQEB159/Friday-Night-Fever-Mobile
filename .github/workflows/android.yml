@@ -42,7 +42,7 @@ jobs:
           haxelib install flixel-ui 2.5.0
           haxelib install hxCodec 2.6.0
           haxelib install hscript 2.5.0
-          haxelib install flxanimate 3.0.0
+          haxelib git flxanimate https://github.com/FixedData/flxanimate
           haxelib git linc_luajit https://github.com/AnDevGo/linc_luajit-S
           haxelib list
       
