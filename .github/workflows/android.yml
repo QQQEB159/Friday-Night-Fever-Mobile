@@ -34,8 +34,8 @@ jobs:
       - name: Install Haxelib
         run: |
           haxelib setup ~/haxelib
-          haxelib git hxcpp https://github.com/th2l-devs/hxcpp
-          haxelib git lime https://github.com/th2l-devs/lime int-delta
+          haxelib git hxcpp https://github.com/HomuHomu833/hxcpp
+          haxelib git lime https://github.com/HomuHomu833/lime int-delta
           haxelib install openfl 9.2.2
           haxelib install flixel 5.2.2
           haxelib install flixel-addons 3.0.2
