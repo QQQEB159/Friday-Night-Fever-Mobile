@@ -171,6 +171,8 @@ class CreditsMenu extends MusicBeatState
 		hand.antialiasing = true;
 		hand.updateHitbox();
 		add(hand);
+		
+		addTouchPad("NONE", "B");
 	}
 
 	function onMouseOver(obj:FlxSprite)

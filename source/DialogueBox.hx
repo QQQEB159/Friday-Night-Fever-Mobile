@@ -170,15 +170,20 @@ class DialogueBox extends FlxTypedSpriteGroup<FlxSprite>
 		if (!dialogueStarted)
 			return;
 
-		if (FlxG.keys.anyJustPressed([ESCAPE, BACKSPACE]))
+		if (FlxG.keys.anyJustPressed([ESCAPE, BACKSPACE]) #if android || FlxG.android.justReleased.BACK #end)
 		{
 			return endDialogue();
 		}
 
 		text.delay = FlxG.keys.pressed.SHIFT ? 0.02 : 0.033;
 
+		var justTouched:Bool = false;
+		for (touch in FlxG.touches.list)
+			if (touch.justPressed)
+				justTouched = true;
+		
 		@:privateAccess
-		if (FlxG.keys.anyJustPressed([ENTER, SPACE]) || !text._typing && skip)
+		if ((FlxG.keys.anyJustPressed([ENTER, SPACE]) || justTouched) || !text._typing && skip)
 		{
 			@:privateAccess
 			if (!text._typing)

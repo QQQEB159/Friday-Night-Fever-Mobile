@@ -8,6 +8,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import openfl.Assets;
 import shaders.ColorShader;
+import mobile.TouchUtil;
 
 using StringTools;
 
@@ -145,7 +146,7 @@ class TitleState extends MusicBeatState
 
 		hueShader.onUpdate();
 
-		if (controls.ACCEPT)
+		if (controls.ACCEPT || TouchUtil.justPressed)
 		{
 			if (!transitioning && skippedIntro)
 			{

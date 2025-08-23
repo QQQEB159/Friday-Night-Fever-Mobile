@@ -36,6 +36,8 @@ class BoomboxState extends MusicBeatState
 		add(bg);
 
 		updateText();
+		
+		addTouchPad("LEFT_FULL", "B");
 	}
 
 	override function update(elapsed:Float)

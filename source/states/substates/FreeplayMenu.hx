@@ -229,6 +229,9 @@ class FreeplayMenu extends MusicBeatSubstate
 			},
 			ease: FlxEase.elasticOut
 		});
+		
+		addTouchPad("LEFT_FULL", "A_B");
+		addTouchPadCamera();
 	}
 
 	override function update(elapsed:Float)

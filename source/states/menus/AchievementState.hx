@@ -174,6 +174,8 @@ class AchievementState extends MusicBeatState
 				Sys.exit(1);
 			});
 		}
+		
+		addTouchPad("NONE", "B_C");
 	}
 
 	var shadowTime:Bool = false;
@@ -182,7 +184,7 @@ class AchievementState extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		if (FlxG.keys.justPressed.G && !shadowTime)
+		if ((FlxG.keys.justPressed.G || touchPad.buttonC.justPressed) && !shadowTime)
 			FlxG.switchState(new GamejoltLogin());
 
 		if (controls.BACK && !shadowTime)

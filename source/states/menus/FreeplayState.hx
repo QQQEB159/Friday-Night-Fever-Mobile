@@ -108,6 +108,8 @@ class FreeplayState extends MusicBeatState
 		add(frenzy);
 
 		changeSelection(true);
+		
+		addTouchPad("LEFT_RIGHT", "A_B");
 	}
 
 	override function add(obj:flixel.FlxBasic)
@@ -143,6 +145,7 @@ class FreeplayState extends MusicBeatState
 			allowInput = false;
 			waitTimer = 0;
 			openSubState(new FreeplayMenu(selectingFrenzy));
+			removeTouchPad();
 		}
 
 		if (waitTimer >= 20 && allowInput)
@@ -176,6 +179,9 @@ class FreeplayState extends MusicBeatState
 
 	override function closeSubState()
 	{
+		removeTouchPad();
+		addTouchPad("LEFT_RIGHT", "A_B");
+		
 		if (!loading && !allowInput)
 		{
 			allowInput = true;

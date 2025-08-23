@@ -136,6 +136,9 @@ class CostumeState extends MusicBeatState
 				}
 			}
 		});
+		
+		addTouchPad("LEFT_RIGHT", "A_B");
+		addTouchPadCamera();
 	}
 
 	override function update(elapsed:Float)

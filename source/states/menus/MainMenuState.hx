@@ -145,7 +145,7 @@ class MainMenuState extends InteractableState
 	{
 		super.update(elapsed);
 
-		if (controls.BACK)
+		if (controls.BACK #if android ||  FlxG.android.justReleased.BACK #end)
 			FlxG.switchState(new TitleState());
 	}
 }

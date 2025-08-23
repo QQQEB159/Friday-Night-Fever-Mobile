@@ -137,6 +137,9 @@ class ComboAdjustmentState extends MusicBeatState
 			}
 			ms.setPosition(ClientPrefs.msX, ClientPrefs.msY);
 		}
+		
+		addTouchPad("NONE", "A_B_C");
+		addTouchPadCamera();
 	}
 
 	private function generateStaticArrows(grp:FlxTypedGroup<FlxSprite>, centerPoint:Float, isPlayer:Bool = true):Void
@@ -224,7 +227,7 @@ class ComboAdjustmentState extends MusicBeatState
 			hand.offset.y = 0;
 		}
 
-		if (FlxG.keys.justPressed.SHIFT)
+		if (FlxG.keys.justPressed.SHIFT || touchPad.buttonA.justPressed)
 		{
 			current = switch (current)
 			{
@@ -234,7 +237,7 @@ class ComboAdjustmentState extends MusicBeatState
 			}
 		}
 
-		if (FlxG.keys.justPressed.R)
+		if (FlxG.keys.justPressed.R || touchPad.buttonC.justPressed)
 		{
 			resetPos();
 		}

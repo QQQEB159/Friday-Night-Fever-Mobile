@@ -150,7 +150,7 @@ class StoryMenuState extends InteractableState
 	{
 		super.update(elapsed);
 
-		if (allowInput && controls.BACK)
+		if (allowInput && (controls.BACK #if android ||  FlxG.android.justReleased.BACK #end))
 		{
 			FlxG.switchState(new BrochureMenu());
 		}

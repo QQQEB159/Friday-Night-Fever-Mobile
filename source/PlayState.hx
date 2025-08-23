@@ -42,6 +42,9 @@ import flixel.math.FlxPoint.FlxBasePoint as FlxPoint;
 import Discord.DiscordClient;
 #end
 import sys.FileSystem;
+import mobile.TouchButton;
+import mobile.TouchPad;
+import mobile.input.MobileInputID;
 
 class PlayState extends MusicBeatState
 {
@@ -774,6 +777,15 @@ class PlayState extends MusicBeatState
 		playerStrums = new FlxTypedGroup<FlxSprite>();
 		cpuStrums = new FlxTypedGroup<FlxSprite>();
 
+		#if !android
+		addTouchPad("NONE", "P");
+		addTouchPadCamera();
+		touchPad.visible = true;
+		#end
+		addMobileControls();
+		mobileControls.onButtonDown.add(onButtonPress);
+		mobileControls.onButtonUp.add(onButtonRelease);
+		
 		generateSong(SONG.song);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
@@ -1102,7 +1114,7 @@ class PlayState extends MusicBeatState
 
 	function startCountdown():Void
 	{
-		startedCountdown = true;
+		startedCountdown = mobileControls.instance.visible = true;
 		skipDialogue = true;
 		inCutscene = false;
 
@@ -1768,7 +1780,7 @@ class PlayState extends MusicBeatState
 
 		scripts.callFunction("onUpdate", [elapsed]);
 
-		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
+		if ((FlxG.keys.justPressed.ENTER || #if android FlxG.android.justReleased.BACK #else touchPad.buttonP.justPressed #end) && startedCountdown && canPause)
 		{
 			persistentUpdate = false;
 			persistentDraw = true;
@@ -2439,6 +2451,7 @@ class PlayState extends MusicBeatState
 		}
 
 		canPause = false;
+		mobileControls.instance.visible = #if !android touchPad.visible = #end false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
 
@@ -3199,6 +3212,71 @@ class PlayState extends MusicBeatState
 		}
 	}
 
+	private function onButtonPress(button:TouchButton):Void
+	{
+		if (button.IDs.filter(id -> id.toString().startsWith("EXTRA")).length > 0)
+			return;
+
+		var buttonCode:Int = (button.IDs[0].toString().startsWith('NOTE')) ? button.IDs[0] : button.IDs[1];
+
+		if (ClientPrefs.botplay || paused || inCutscene)
+			return;
+
+		if (buttonCode == -1 || keysHeld[buttonCode])
+		{
+			return;
+		}
+		else
+			keysHeld[buttonCode] = true;
+
+		// Temporarily sets songPosition to the song's exact timing. does this do anything? more news at 10.
+		var previousTiming:Float = Conductor.songPosition;
+		Conductor.songPosition = FlxG.sound.music.time;
+
+		// Checks for most on-time / late note.
+		var closestNote:Note = null;
+		notes.forEachAlive((note:Note) ->
+		{
+			if (note.mustPress && note.noteData == buttonCode && !note.isSustainNote && note.timeDiff <= 166 * FlxG.sound.music.pitch)
+			{
+				if (closestNote == null || closestNote != null && note.timeDiff < closestNote.timeDiff)
+					closestNote = note;
+			}
+		});
+
+		// Player hits note
+		if (closestNote != null)
+		{
+			playerStrums.members[buttonCode].animation.play('confirm', true);
+			goodNoteHit(closestNote);
+		}
+		else if (!ClientPrefs.ghost)
+			noteMiss(buttonCode);
+
+		Conductor.songPosition = previousTiming;
+	}
+
+	private function onButtonRelease(button:TouchButton):Void
+	{
+		if (button.IDs.filter(id -> id.toString().startsWith("EXTRA")).length > 0)
+			return;
+
+		var buttonCode:Int = (button.IDs[0].toString().startsWith('NOTE')) ? button.IDs[0] : button.IDs[1];
+
+		if (ClientPrefs.botplay || paused || inCutscene)
+			return;
+
+		if (buttonCode == -1)
+			return;
+
+		keysHeld[buttonCode] = false;
+
+		if (playerStrums.members[buttonCode].animation.curAnim.name != 'static')
+		{
+			playerStrums.members[buttonCode].animation.play('static');
+		}
+	}
+	
 	function onGameResize(width, height)
 	{
 		var textAntialiasing:Bool = width > 1280 ? true : false;

@@ -101,6 +101,9 @@ class GameOverSubstate extends MusicBeatSubstate
 		FlxG.camera.shake(0.0095, 0.3);
 
 		PlayState.deaths += 1;
+		
+		addTouchPad("NONE", "A_B");
+		addTouchPadCamera();
 	}
 
 	override function update(elapsed:Float)

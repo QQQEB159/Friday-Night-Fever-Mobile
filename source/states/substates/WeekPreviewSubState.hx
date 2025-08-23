@@ -133,6 +133,9 @@ class WeekPreviewSubState extends MusicBeatSubstate
 
 		FlxTween.tween(bg, {x: bg.x - bg.width}, 0.5);
 		updateDifficulty();
+		
+		addTouchPad"LEFT_RIGHT", "A_B");
+		addTouchPadCamera();
 	}
 
 	function createCharacter(characterStr:String, offsetX:Float = 0, offsetY:Float = 0)

@@ -77,6 +77,8 @@ class BrochureMenu extends MusicBeatState
 		text = new FlxText(0, FlxG.height * 0.9, 0, "", 24);
 		text.setFormat("VCR OSD Mono", 22, 0xFFFFFFFF, CENTER);
 		add(text);
+		
+		addTouchPad("LEFT_RIGHT", "A_B");
 	}
 
 	function changeSelected(firstStart:Bool = false)
