@@ -802,7 +802,9 @@ class PlayState extends MusicBeatState
 			var bloomShader = new ShaderFilter(bloom);
 			snowShader = new ShaderFilter(snow);
 
+			if (ClientPrefs.shaders) {
 			camGame.setFilters([snowShader, bloomShader]);
+			}
 			snowOn = true;
 
 			camGame.filtersEnabled = true;

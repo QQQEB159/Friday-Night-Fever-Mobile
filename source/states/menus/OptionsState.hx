@@ -183,8 +183,6 @@ class OptionsState extends MusicBeatState
 		if (touchPad != null && touchPad.buttonX.justPressed && !inCategory) {
 			touchPad.active = touchPad.visible = false;
 			qqqeb = true;
-			for (i in sprites)
-				i.alpha = 0;
 			openSubState(new mobile.MobileControlSelectSubState());
 		}
 		
@@ -545,7 +543,7 @@ class Option
 		switch (type)
 		{
 			case INT:
-				var num:Float = (FlxG.keys.pressed.SHIFT && shiftInterval != 1 ? shiftInterval : increaseInterval);
+				var num:Float = ((FlxG.keys.pressed.SHIFT || touchPad.buttonX.pressed) && shiftInterval != 1 ? shiftInterval : increaseInterval);
 				var newValue:Int = cast FlxMath.bound(Reflect.field(ClientPrefs, saveVariable) + (direction == LEFT ? -num : num), range[0], range[1]);
 				Reflect.setField(ClientPrefs, saveVariable, newValue);
 				trace("Changing " + saveVariable + " to " + newValue);
