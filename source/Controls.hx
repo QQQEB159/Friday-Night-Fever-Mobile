@@ -190,7 +190,7 @@ class Controls extends FlxActionSet
 	public var ACCEPT(get, never):Bool;
 
 	inline function get_ACCEPT()
-		return _accept.check() || || mobileControlsJustPressed(MobileInputID.A);
+		return _accept.check() || mobileControlsJustPressed(MobileInputID.A);
 
 	public var BACK(get, never):Bool;
 
